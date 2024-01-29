@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width,  initial-scale=1.0" name="viewport" />
+<meta http-equiv='refresh' content='10' />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+<script type="text/javascript"
+	src="https://www.gstatic.com/charts/loader.js"></script>
+
+<title>Real-Time Execution Report</title>
+<style type="text/css">
+
+:root {
+  --blueGrey: #2d3f61;
+  --lightBlueGrey: #5071af;
+  --yellow: #ffc800;
+  --red: red;
+  --white: white;
+}
+
+.topheader {
+	overflow: auto;
+	padding: 5px 15px 5px;
+	margin: 0;
+	background-color: var(--blueGrey);
+}
+
+.hamburgermenu {
+	float: left;
+	cursor: pointer;
+}
+
+.hamburgerbar {
+	width: 25px;
+	height: 4px;	
+	margin: 4px 0;
+	border-radius: 2px;
+	background-color: var(--yellow);
+}
+
+.xmlSuiteName {
+	color: var(--white);
+	float: left;
+	padding: 15px;
+	padding-top: 8px;
+	padding-bottom: 2px;
+	text-decoration: none;
+	font-size: 14px;
+	line-height: 14px;
+	border-radius: 2px;
+	font-weight: bold;
+}
+
+#report-titleIcon {
+	padding-right: 12px;
+	font-size: 30px;
+	font-weight: bold;
+	vertical-align: -30%;
+	color: var(--red);
+}
+
+.report-title {
+	float: left;
+	text-align: center;
+	position: absolute;
+	top: 2.5%;
+	left: 50%;
+	padding: 15px;
+	padding-top: 5px;
+	padding-bottom: 2px;
+	border-radius: 2px;
+	font-size: 20px;
+	font-weight: bold;
+	letter-spacing: 3px;
+	transform: translate(-50%, -50%);
+	color: var(--white);
+}
+
+.topnavheader-right {
+	float: right;
+}
+
+.topnavheader-right a {
+	text-align: center;
+	padding: 15px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	font-size: 14px;
+	border-radius: 2px;
+	color: var(--white);
+	cursor: pointer;
+}
+
+.autoRefresh{
+	display: inline;
+}
+
+#autoRefreshIcon {
+	font-size: 28px;
+	vertical-align: -30%;
+	cursor: pointer;
+	color: var(--red);	
+}
+
+#liveTag{
+	font-size: 14px;
+	padding: 2px;
+	border-radius: 6px;
+	font-weight: bold;
+	color: var(--white);
+	background: var(--red);
+	display: inline;
+}
+
+body {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 80%;
+	font-weight: 500;
+	margin: 0;
+}
+
+.blink_me {
+	animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker { 50% {
+	opacity: 0.5;
+}}
+
+.sidenav {
+	position: fixed;
+	overflow-x: hidden;
+	height: 100%;
+	width: 0;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	padding-top: 60px;
+	background-color: var(--blueGrey);
+	transition: 0.5s;
+}
+
+.material-icons.sidenavmenu-icons {
+	font-size: 36px;
+	vertical-align: -30%;
+	color: var(--yellow);
+}
+
+.material-icons {
+	font-size: 36px;
+	vertical-align: -30%;
+}
+
+.sidenav a {
+	padding: 8px 8px 8px 8px;
+	text-decoration: none;
+	font-size: 15px;
+	color: #f1f1f1;
+	display: block;
+	transition: 0.3s;
+	cursor: pointer;
+}
+
+.sidenav a:hover {
+	color: #111;
+	background-color: var(--lightBlueGrey);
+}
+
+#sidenav-header {
+	position: absolute;
+	top: 0;
+	font-weight: bold;
+	margin: 0;
+	height: 50px;
+	width: 99%;
+	background-color: white;
+	border: 2px var(--blueGrey);
+	border-style: dashed;
+}
+
+#sidenav-logo {
+	padding-top: 4px;
+	padding-left: 40px;
+	font-size: 36px;
+	padding-left: 40px;
+	font-size: 36px;
+	color: indianred;
+}
+
+#sidenav-title {
+	text-align: center;
+	font-size: 18px;
+	color: var(--blueGrey);
+}
+
+.sidenav .sidenav-closebtn {
+	position: absolute;
+	top: 0;
+	right: 20px;
+	font-size: 32px;
+	margin-left: 50px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.header-right, .modal-header-right {
+	float: right;
+}
+
+.modal-header {
+ 	overflow : auto;
+	background-color: var(--blueGrey);
+	padding: 1px 1px 5px;
+	margin: 0;
+	border-radius: 4px;
+}
+
+#modal-header-icon {
+	font-size: 28px;
+	padding-right: 12px;
+	color: red;
+	font-weight: bold;
+}
+
+.modal-header-title {
+	color: #FFFFFF;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	float: none;
+	position: absolute;
+	top: 5%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	letter-spacing: 4px;
+	width: 80%;
+}
+
+.modal-header-right a {
+	color: #FFFFFF;
+	text-align: center;
+	padding: 8px;
+	text-decoration: none;
+	font-size: 6px;
+	line-height: 2px;
+	border-radius: 2px;
+}
+
+#modal-close-icon {
+	font-size: 24px;
+	padding-right: 5px;
+	color: white;
+}
+
+#topnavbar, #search {
+	transition: margin-left .5s;
+}
+
+.modal {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.3);
+	opacity: 0;
+	visibility: hidden;
+}
+
+.modal-box {
+	position: absolute;
+	top: 53%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: rgb(255, 255, 255);
+	padding: 1rem 1.5rem;
+	width: 24rem;
+	border-radius: 0.5rem;
+	height: 90vh;
+	width: 100vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.flex-container {
+  display: flex;
+  align-items: stretch;
+  background-color: #f1f1f1;
+}
+
+.flex-container > div {
+  color: white;
+  width: 100px;
+  margin: 10px;
+  text-align: center;
+  line-height: 75px;
+  font-size: 30px;
+}
+
+.modal-box-exceptionTable {
+	position: absolute;
+	top: 53%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: rgb(255, 255, 255);
+	padding: 1rem 1.5rem;
+	width: 24rem;
+	border-radius: 0.5rem;
+	height: 90vh;
+	width: 190vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.modal-box-visualization {
+	position: absolute;
+	top: 53%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: rgb(255, 255, 255);
+	padding: 1rem 1.5rem;
+	width: 24rem;
+	border-radius: 0.5rem;
+	height: 90vh;
+	width: 100vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.close-button {
+	float: right;
+	width: 1.5rem;
+	line-height: 1.5rem;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 0.25rem;
+}
+
+.show-modal-one {
+	opacity: 1;
+	visibility: visible;
+	transform: scale(1.0);
+}
+
+.show-modal-two {
+	opacity: 1;
+	visibility: visible;
+	transform: scale(1.0);
+}
+
+.show-modal-three {
+	opacity: 1;
+	visibility: visible;
+	transform: scale(1.0);
+}
+
+.show-modal-four {
+	opacity: 1;
+	visibility: visible;
+	transform: scale(1.0);
+}
+
+.show-modal-overlay {
+	opacity: 1;
+	visibility: visible;
+	transform: scale(1.0);
+}
+
+.suitetitle {
+	padding-left: 2%;
+	font-size: 12px;
+}
+
+#suiteWiseTable {
+	table-layout: auto;
+	width: 100%;
+	padding: 4px;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 10px;
+}
+
+#customExceptionTable{
+	table-layout: auto;
+	width: 100%;
+	padding: 4px;
+	margin: 0;
+	border-radius: 10px;
+  	top: 8px;
+  	left: 0;
+}
+
+@media screen and (max-height: 450px) {
+	.sidenav {
+		padding-top: 15px;
+	}
+	.sidenav a {
+		font-size: 18px;
+	}
+}
+
+table {
+	table-layout: auto;
+	border: 0px grey;
+	border-style: solid;
+	width: 99%;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 10px;
+}
+
+#myTable {
+	transition: width .8s, margin-left 0.5s;
+}
+
+th {
+	background: #5071af;
+	color: white;
+	font-weight: bold;
+	text-align: center;
+	border: grey;
+	border-style: outset;
+	border-radius: 5px;
+	border-style: outset;
+}
+
+td {
+	padding: 3px;
+	border: .2px grey;
+	word-wrap: break-word;
+	border-style: solid;
+	border-radius: 4px;
+	box-shadow: 2px 2px var(--blueGrey);
+}
+
+.result {
+	text-align: center;
+	font-weight: bold;
+}
+
+tr.pass:hover td {
+	background-color: #b3ffb3;
+	box-shadow: 0px 0px 2px 2px green;
+}
+
+tr.fail:hover td {
+	background-color: #ffb3b3;
+	box-shadow: 0px 0px 2px 2px red;
+}
+
+tr.skip:hover td {
+	background-color: #b3d9ff;
+	box-shadow: 0px 0px 2px 2px blue;
+}
+
+tr.running:hover td {
+	background-color: #ffffb3;
+	box-shadow: 0px 0px 2px 2px #ffff19;
+}
+
+.result.running {
+	background-color: #ffff19;
+	text-shadow: 2px 2px white;
+	font-weight: bold;
+}
+
+.pass-count, .skip-count, .fail-count {
+	text-align: center;
+	font-size: 12px;
+}
+
+td.suitetitle, td.pass-count, td.skip-count, td.fail-count {
+	padding: 5px;
+}
+
+td.pass-count {
+	background-color: #b3ffb3;
+}
+
+td.skip-count {
+	background-color: #b3d9ff;
+}
+
+td.fail-count {
+	background-color: #ffb3b3;
+}
+
+#runningIcon {
+	color: black;
+	font-size: 20px;
+	animation: rotation 1s infinite linear;
+}
+
+@keyframes rotation {from { transform:rotate(0deg);
+	
+}
+to {
+	transform: rotate(359deg);
+}
+}
+
+pre {
+	background-color: #eee;
+	white-space: pre-wrap;
+}
+
+option {
+	color: black;
+	font-weight: bold;
+}
+
+#filterBy {
+	font-size: 22px;
+	color: white;
+	padding-left: 3px;
+}
+
+#passIcon, #failIcon, #skipIcon {
+	font-size: 22px;
+	padding-right: 5px;
+}
+
+#passIcon, .result.pass {
+	color: green;
+}
+
+#failIcon, .result.fail {
+	color: red;
+}
+
+#skipIcon, .result.skip {
+	color: blue;
+}
+
+#executionCompletedNote {
+	position: relative;
+	left: 10px;
+	background: #ffff00;
+	height: 10%;
+	width: 28%;
+	color: black;
+}
+
+#search {
+	padding: 20px;
+	position: auto;
+}
+
+#searchResultLabel{
+	position: relative;
+	left: 70%;
+	height: 10%;
+	width: 28%;
+	color: black;
+	font-weight: bold;
+}
+
+#scrollToTopBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  background-color: DodgerBlue;
+  color: white;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+#scrollToTopBtn:hover {
+  background-color: RoyalBlue;
+}
+
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+</style>
+</head>
+<body>
+	<!-- TopNav Bar -->
+	<div id="topnavbar">
+		<div class="topheader">
+			<div onclick="openNav()" class="hamburgermenu">
+				<div class="hamburgerbar"></div>
+				<div class="hamburgerbar"></div>
+				<div class="hamburgerbar"></div>
+			</div>
+			<div class="xmlSuiteName">
+				<label>Execution Suite Name: </label> <span id="executionSuiteName"></span>
+			</div>
+			<div class="report-title">
+				<i id="report-titleIcon" class="material-icons">insights</i>Real-Time Execution Report
+			</div>
+			<div class="topnavheader-right">
+				<a id="pageAutoRefresh" class="autoRefresh" onclick="stopPageAutoRefresh()">
+					Auto Refresh 
+					<i id="autoRefreshIcon" class="material-icons autorefreshicon">toggle_on</i>
+					<span class="blink_me" id="liveTag">Live</span>
+				</a>
+			</div>
+		</div>
+	</div>
+	
+	<!-- SideNav Bar -->
+	<div id="sidenavbar" class="sidenav">
+		<div id="sidenav-header">
+			<i id="sidenav-logo" class="material-icons sidenavmenu-icons">analytics</i>
+			<span id="sidenav-title">Result Analytics</span>
+		</div>
+		<div class="sidenav-closebtn" onclick="closeNav()">
+			<i id="sidenav-closeNavIcon" class="material-icons sidenavmenu-icons">arrow_circle_left</i>
+		</div>
+		
+		<!-- SideNav Menu Links -->
+		<a class="sidenavmenu one" id="classsuite-wise-result-menu">
+			<i class="material-icons sidenavmenu-icons">assessment</i>
+			Class-Wise Result
+		</a>
+		<a class="sidenavmenu two" id="module-wise-result-menu">
+			<i class="material-icons sidenavmenu-icons">account_tree</i>
+			Module-Wise Result
+		</a>
+		<a class="sidenavmenu three" id="exception-details-menu">
+			<i class="material-icons sidenavmenu-icons">list</i>
+			Exception Details
+		</a>
+		<a class="sidenavmenu four" id="suitewise-chart-menu">
+			<i class="material-icons sidenavmenu-icons">auto_graph</i>
+			SuiteWise Chart Visualization
+		</a>
+		
+		<!-- ClassSuite-Wise Result Modal -->
+		<div class="modal one">
+			<div class="modal-box one">
+				<div class="modal-header">
+					<div class="modal-header-title">
+						<i id="modal-header-icon" class="material-icons">pivot_table_chart</i>ClassSuite-Wise
+						Result
+					</div>
+					<div class="modal-header-right">
+						<a class="close-button one"><i id="modal-close-icon"
+							class="material-icons">cancel</i></a>
+					</div>
+				</div>
+				<table id="suiteWiseTable">
+					<thead>
+						<th style="width: 25%; background: rgb(89, 90, 89);">SuiteName</th>
+						<th
+							style="width: 15%; background: forestgreen; text-align: center">
+							Pass</th>
+						<th style="width: 15%; background: #3498db; text-align: center">
+							Skip</th>
+						<th style="width: 15%; background: indianred; text-align: center">
+							Fail</th>
+						<th style="width: 15%; background: grey; text-align: center">
+							Total</th>
+					</thead>
+					<tbody id="classSuiteWiseResultTable">
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<!-- Module Wise Result Modal -->
+		<div class="modal two">
+			<div class="modal-box two">
+				<div class="modal-header">
+					<div class="modal-header-title">
+						<i id="modal-header-icon" class="material-icons">pivot_table_chart</i>Module-Wise
+						Result
+					</div>
+					<div class="modal-header-right">
+						<a class="close-button two"><i id="modal-close-icon"
+							class="material-icons">cancel</i></a>
+					</div>
+				</div>
+				<table id="suiteWiseTable">
+					<thead>
+						<th style="width: 30%; background: rgb(89, 90, 89);">ModuleName</th>
+						<th
+							style="width: 8%; background: forestgreen; text-align: center">
+							Pass</th>
+						<th style="width: 8%; background: #3498db; text-align: center">
+							Skip</th>
+						<th style="width: 8%; background: indianred; text-align: center">
+							Fail</th>
+						<th style="width: 8%; background: grey; text-align: center">
+							Total</th>
+					</thead>
+					<tbody id="moduleWiseResultTable">
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<!-- Exception Details Modal -->
+		<div class="modal three">
+			<div class="modal-box three">
+				<div class="modal-header">
+					<div class="modal-header-title">
+						<i id="modal-header-icon" class="material-icons">pivot_table_chart</i>Exception Details
+					</div>
+					<div class="modal-header-right">
+						<a class="close-button three"><i id="modal-close-icon"
+							class="material-icons">cancel</i></a>
+					</div>
+				</div>
+				<!-- <div class="flex-container"> -->
+				<table id="#suiteWiseTable">
+					<thead>
+						<th style="width: 5%">#</th>
+						<th style="width: 50%">Exceptions</th>
+						<th style="width: 7%">Count</th>
+					</thead>
+					<tbody id="exceptionListTable">
+					</tbody>
+				</table>
+				<!-- <div id="exceptionListChart"></div> -->
+				<!-- </div> -->
+				<!-- <br> -->
+				<!-- <table>
+					<thead>
+						<th>TestCase ID</th>
+						<th>Exception Name</th>
+						<th>Exception Message</th>
+						<th>Method Root Cause</th>
+						<col width="10%" />
+						<col width="15%" />
+						<col width="25%" />
+						<col width="50%" />
+					</thead>
+					<tbody id="exceptionRootCauseTable"></tbody>
+				</table> -->
+			</div>
+		</div>
+		
+		<!-- Suite-Wise Result Chart Visualization -->
+		<div class="modal four">
+			<div class="modal-box-visualization four">
+				<div class="modal-header">
+					<div class="modal-header-title">
+						<i id="modal-header-icon" class="material-icons">auto_graph</i>SuiteWise Chart Visualization
+					</div>
+					<div class="modal-header-right">
+						<a class="close-button four"><i id="modal-close-icon"
+							class="material-icons">cancel</i></a>
+					</div>
+				</div>
+				<div id="suiteWiseChartVisualization" style="width: 850px; height: 600px;"></div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Background Overlay -->
+	<div class="modal overlay"></div>
+	
+	<!-- Execution Details Dashboard -->
+	<div style="float: left; padding-top: 1%;">
+		<h3 id="executionCompletedNote"></h3>
+		
+		<div><table><tr><td style="font-weight:bold;background:#ffc800;text-align:center;">Environment</td><td id="environmentUrl"></td></tr></table></div>
+		
+		<!-- Execution Timing Details Table -->
+		<table style="padding-top: 1%;">
+			<thead>
+				<th>Start Time</th>
+				<th>Last Modified</th>
+				<th>Time Taken</th>
+			</thead>
+			<tr>
+				<td id="startTime" style="text-align: center;"></td>
+				<td id="lastModifiedTime" style="text-align: center;"></td>
+				<td id="totalExecutionTime" style="text-align: center;"></td>
+			</tr>
+		</table>
+		
+		<!-- Search & Filter -->
+		<div id="search" style="float: left; padding-top: 4%;">
+			<label
+				style="background-color: #C0C0C0; border: 2px black; border-style: solid; padding: 3px; font-weight: bold; border-radius: 6px;">Search
+				By: <select id="searchFilterDropdown"
+				style="background-color: #C0C0C0; color: white; font-weight: bold; padding: 2px; border: 0;">
+					<option value="testCaseId">TestCaseID</option>
+					<option value="testScriptPath">Script Path</option>
+					<option value="testCaseTitle">Title</option>
+					<option value="testCaseException.message">Exception Details</option>
+			</select>
+			</label><input id="searchInputText" type="text" placeholder="search input"
+				style="border-radius: 6px; padding: 3px; width: 450px;"
+				onkeyup="loadTestResultsWithFilter()"></input>
+			<!-- <button
+			style="background-color: #DE3163; color: white; font-weight: bold; border: 2px black; border-style: solid; padding: 2px 4px 4px; border-radius: 10px; text-align: center;">
+			Filter<i id="filterBy" class="material-icons">filter_alt</i>
+		</button> -->
+		</div>
+		<div id="searchResultLabel"><label>Found <span id="searchResultCount"></span> results.</label></div>
+	</div>
+	
+	<!-- Execution Status in Pie Chart -->
+	<span id="piechart" style="float: right; padding: 0px;"></span>
+	<table
+		style="float: right; width: 25%; padding-top: 4%; padding-left: 0;">
+		<thead>
+			<th style="width: 1%; font-weight: bold; text-align: center; color: white;">Test Status</th>
+			<th	style="width: 1%; font-weight: bold; text-align: center;color: white;">Count</th>
+		</thead>
+		<tr>
+			<td id="runningTestLabel" style="width: 1%; font-weight: bold; background: yellow; text-align: center; color: black;"><i
+				id="runningIcon" class="material-icons">rotate_right</i>Running</td>
+			<td id="runningTestCount"
+				style="width: 1%; font-weight: bold; text-align: center"></td>
+		</tr>
+		<tr>
+			<td
+				style="width: 1%; font-weight: bold; background: forestgreen; text-align: center; color: white;">Passed</td>
+			<td id="passedTestCount"
+				style="width: 1%; font-weight: bold; text-align: center;color:green;"></td>
+		</tr>
+		<tr>
+			<td
+				style="width: 1%; font-weight: bold; background: #3498db; text-align: center; color: white;">Skipped</td>
+			<td id="skippedTestCount"
+				style="width: 1%; font-weight: bold; text-align: center;color: blue;"></td>
+		</tr>
+		<tr>
+			<td
+				style="width: 1%; font-weight: bold; background: indianred; text-align: center; color: white;">Failed</td>
+			<td id="failedTestCount"
+				style="width: 1%; font-weight: bold; text-align: center;color: red;"></td>
+		</tr>
+		<tr>
+			<td
+				style="width: 1%; font-weight: bold; background: white; text-align: center; color: black;">Total</td>
+			<td id="totalTestCount"
+				style="width: 1%; font-weight: bold; text-align: center"></td>
+		</tr>
+		<tr>
+			<td
+				style="width: 1%; font-weight: bold; background: grey; text-align: center; color: white;">Pending</td>
+			<td id="pendingTestCount"
+				style="width: 1%; font-weight: bold; text-align: center"></td>
+		</tr>
+	</table>
+	
+	<!-- Execution Test Result Table -->
+	<table id="myTable">
+		<thead>
+			<th>#</th>
+			<th>Test Case ID</th>
+			<th>Class Suite</th>
+			<th>Title</th>
+			<th>Status</th>
+			<th>Test Results</th>
+			<th>Links</th>
+		<col width="1%" />
+		<col width="1%" />
+		<col width="2%" />
+		<col width="25%" />
+		<col width="4%" />
+		<col width="15%" />
+		<col width="6%" />
+		</thead>
+		<tbody id="testCaseResultTable">
+		</tbody>
+	</table>
+	
+	<!-- Page Footer -->
+	<div class="footer">
+		<p style="text-align:center;font-weight:bold;">-*-*-*-*-*-*-*-* End of the Report *-*-*-*-*-*-*-*-</p>
+		<button onclick="topFunction()" id="scrollToTopBtn" title="Go to top">Top</button>
+	</div>
+	<script>
+		LiveJSONDataInsert
+	</script>
+	<script type="text/javascript">
+		/* Stop page auto refresh */
+		function stopPageAutoRefresh() {
+			$('#pageAutoRefresh').attr("onclick", "pageLoadEnable()");
+			$('#autoRefreshIcon').css("color", "white");
+			$('#autoRefreshIcon').html("toggle_off");
+			$('#liveTag').css("display", "none");
+			window.stop();
+		}
+		/* Enable page auto refresh */
+		function pageLoadEnable() {
+			$('#pageAutoRefresh').attr("onclick", "stopPageAutoRefresh()");
+			$('#autoRefreshIcon').html("toggle_on");
+			$('#autoRefreshIcon').css("color", "red");
+			$('#liveTag').css("display", "inline");
+			location.reload();
+		}
+		/* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+		function openNav() {
+			$("#sidenavbar").css("width", "20%");
+			document.body.style.overflow = "hidden";
+			stopPageAutoRefresh();
+		}
+
+		/* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+		function closeNav() {
+			$("#sidenavbar").css("width", "0");
+			document.body.style.overflow = "auto";
+		}
+		
+		/* This method will update the execution details of the tests */
+		updateExecutionResultData();
+		
+		function updateExecutionResultData(){
+			for(var key in executionDetailsJson){
+				if(key == "testExecutionStatus"){
+					if(executionDetailsJson[key] == "running"){
+						$('#pageAutoRefresh').css("display", "inline");
+						$('#executionCompletedNote').html("Execution In Progress...");
+						$('#executionCompletedNote').css("background", "#ffff00");
+					} else if(executionDetailsJson[key] == "finished"){
+						$('#pageAutoRefresh').css("display", "none");
+						$('#executionCompletedNote').html("Execution Completed !!!");
+						$('#executionCompletedNote').css("background", "#66ff33");
+						$('#runningTestLabel').css("display", "none");
+						$('#runningTestCount').css("display", "none");
+						stopPageAutoRefresh();
+					}
+				} else {
+					$('#' + key).html(executionDetailsJson[key]);
+				}
+			}
+		}
+		
+		/* This method will sort the test results by Status */
+		function sortByProperty(property){  
+		   return function(a,b){  
+		      if(a[property] > b[property])  
+		         return 1;  
+		      else if(a[property] < b[property])  
+		         return -1;
+		      return 0;  
+		   }  
+		};
+	
+		const sortedJSONData = testCaseResultData.sort(sortByProperty("testCaseStatus"));
+		loadTestResults(sortedJSONData);
+	
+		/* This method will filter and return the test results based on user inputs*/
+		function loadTestResultsWithFilter() {
+			stopPageAutoRefresh();
+			let filterName = document.getElementById('searchFilterDropdown').value;
+	        var searchValue = document.getElementById('searchInputText').value;
+	        if(filterName.includes("testCaseException")){ 
+	        	var filterRootName = "testCaseException";
+	        	var filterSubName = filterName.split(".")[1];
+	        	const filteredData = testCaseResultData.filter(function(jsonArray){
+	        		if(jsonArray.hasOwnProperty(filterRootName)){
+	        			if(jsonArray[filterRootName].hasOwnProperty(filterSubName)){
+	    			if((jsonArray[filterRootName][filterSubName].toString()).toLowerCase().includes(searchValue.toLowerCase())){
+	    				return true
+	    				}	
+	        		}
+	        		}
+	    			});
+	        	$('#testCaseResultTable').html('');
+	    		loadTestResults(filteredData);
+	        } else {
+	        	const filteredData = testCaseResultData.filter(function(jsonArray){
+	    			if(jsonArray[filterName].toString().toLowerCase().includes(searchValue.toLowerCase())){
+	    				return true
+	    				}
+	    			});
+	        	$('#testCaseResultTable').html('');
+	    		loadTestResults(filteredData);
+	        }
+		};
+		
+		/* This method will generate the test results in HTML table format */
+	    var row = '';
+	
+	    function loadTestResults(resultData) {
+	    	var testCaseTable = document.getElementById('testCaseResultTable');
+	        for (var i = 0; i < resultData.length; i++) {
+	        	testCaseTable.innerHTML += generateTableRows(resultData[i], i);
+	        }
+	    };
+    
+	    function generateTableRows(inputJSONData, i) {
+            var status = inputJSONData.testCaseStatus;
+            var classSuite = inputJSONData.testScriptPath.split(".")[inputJSONData.testScriptPath.split(".").length-1];
+            row = `<tr class="${status.toLowerCase()}">
+                             <td style="text-align: center;">${(i + 1)}</td>
+                             <td>${inputJSONData.testCaseId}</td>
+                             <td>${classSuite}</td>
+                             <td>${inputJSONData.testCaseTitle}</td>`;
+            if (status == "Pass") {
+                row += `<td class="result pass"><i id="passIcon"class="material-icons">check_circle
+                	</i>${inputJSONData.testCaseStatus}</td><td style="color:green;">${inputJSONData.testCaseResult}</td>`;
+            }
+            if (status == "Fail") {
+                row += `<td class="result fail"><i id="failIcon"class="material-icons">cancel
+                	</i>${inputJSONData.testCaseStatus}</td><td> <div style="color:red;word-wrap:break-word;word-break: break-all;">${inputJSONData.testCaseException.message}</div><br/>
+                             <div class="toggler" data-prod-cat="${i}" onClick="toggleException(${i})">
+                             <strong>StackTrace Information<i
+							class="material-icons" style="font-size:24px;color:black;">arrow_drop_down</i></strong></div></td>`;
+            }
+            if (status == "Skip") {
+                row += `<td class="result skip"><i id="skipIcon"class="material-icons">check_circle_outline
+                	</i>${inputJSONData.testCaseStatus}</td><td> <div style="color:blue;word-wrap:break-word;word-break: break-all;">${inputJSONData.testCaseException.message}</div><br/>
+                             <div class="toggler" data-prod-cat="${i}" onClick="toggleException(${i})">
+                             <strong>StackTrace Information<i
+							class="material-icons" style="font-size:24px;color:black;">arrow_drop_down</i></strong></div></td>`;
+            }
+            if(status == "Running"){
+            	row += `<td class="result running"><div><i id="runningIcon" class="material-icons">rotate_right</i><span class="blink_me">${inputJSONData.testCaseStatus}</span></div></td><td></td>`;
+            }
+            if (typeof inputJSONData.testCaseScreenshot !== "undefined" || typeof inputJSONData.testCaseBSUrls !== "undefined" || status != "Running") {
+                row += "<td>";
+                if (typeof inputJSONData.testCaseScreenshot !== "undefined" && inputJSONData.testCaseScreenshot != "" && inputJSONData.testCaseScreenshot != "NA") {
+                    row += `<div><a href="${inputJSONData.testCaseScreenshot}" target="_blank" rel="noopener noreferrer">Screenshot<i class="material-icons" style="padding:2px;font-size:15px;color:black;">open_in_new</i></a></div>`;
+                }
+                if (typeof inputJSONData.testCaseBSUrls !== "undefined" && inputJSONData.testCaseBSUrls != "NA" && inputJSONData.testCaseBSUrls.length > 0) {
+                	for(var urls in inputJSONData.testCaseBSUrls) {
+                    	row += `<div><a href="${inputJSONData.testCaseBSUrls[urls]}" target="_blank" rel="noopener noreferrer">BS Link<i class="material-icons" style="padding:2px;font-size:15px;color:black;">open_in_new</i></a></div>`;
+                    }
+                }
+                row += "</td>";
+            } else {
+                row += "<td></td>";
+            }
+            if (status == "Fail" || status == "Skip") {
+                row += `<tr class="cat${i}" style="display:none">
+                         <td colspan="7">
+                         <div style="padding-top:5px;"><label style="font-weight:bold;">Exception Name: </label>${inputJSONData.testCaseException.name}</div>
+                         <div style="padding-top:5px;"><label style="font-weight:bold;">Exception Message: </label> ${inputJSONData.testCaseException.message}</div>
+                         <div style="font-weight:bold;padding-top:5px;">StackTrace Information:
+						 <button id="tablinks highLevelStackTrace cat${i}" onclick="toggleExceptionLevel('cat${i}', 'highLevelStackTrace')" style="font-weight: medium;font-size: 12px;padding:1px;background:light grey;border-radius:6px;color:black;">HighLevel StackTrace</button>
+						 <button id="tablinks fullStackTrace cat${i}" onclick="toggleExceptionLevel('cat${i}', 'fullStackTrace')" style="font-weight: medium;font-size: 12px;padding:1px;background:#555555;border-radius:6px;color:white;">Full StackTrace</button></div>
+                         <div id="highLevelStackTrace cat${i}" class="tabcontent cat${i}" style="display:none;"><pre>${inputJSONData.testCaseException.highLevelStackTrace}</pre></div>
+						 <div id="fullStackTrace cat${i}" class="tabcontent cat${i}" style="display:block;"><pre>${inputJSONData.testCaseException.stackTrace}</pre></div>
+						 </td></tr>`;
+            }
+            $('#searchResultCount').html((i + 1));
+            return row;
+        };
+		
+        /* This method will toggle Exception Stacktrace accordion for the corresponding test result */
+		function toggleException(exceptionId){
+            $('.cat' + exceptionId).toggle();
+		}
+		
+        /* These below methods will toggle the modals on clicking each sidenav menu*/
+		let modalone = document.querySelector(".modal.one");
+        let showone = document.querySelector(".sidenavmenu.one");
+        let closeButtonone = document.querySelector(".close-button.one");
+
+        let modaltwo = document.querySelector(".modal.two");
+        let showtwo = document.querySelector(".sidenavmenu.two");
+        let closeButtontwo = document.querySelector(".close-button.two");
+        
+        let modalthree = document.querySelector(".modal.three");
+        let showthree = document.querySelector(".sidenavmenu.three");
+        let closeButtonthree = document.querySelector(".close-button.three");
+        
+        let modalfour = document.querySelector(".modal.four");
+        let showfour = document.querySelector(".sidenavmenu.four");
+        let closeButtonfour = document.querySelector(".close-button.four");
+        
+        let modalOverlay = document.querySelector(".modal.overlay");
+        let hamburgermenubtn = document.querySelector(".hamburgermenu");
+        let closeButtonSideNav = document.querySelector(".sidenav-closebtn");
+
+        function toggleClassSuiteWiseResultModal() {
+            modalone.classList.toggle("show-modal-one");
+        }
+
+        showone.addEventListener("click", toggleClassSuiteWiseResultModal);
+        closeButtonone.addEventListener("click", toggleClassSuiteWiseResultModal);
+
+        function toggleModuleWiseResultModal() {
+            modaltwo.classList.toggle("show-modal-two");
+        }
+
+        showtwo.addEventListener("click", toggleModuleWiseResultModal);
+        closeButtontwo.addEventListener("click", toggleModuleWiseResultModal);
+        
+        function toggleExceptionListModal() {
+            modalthree.classList.toggle("show-modal-three");
+        }
+
+        showthree.addEventListener("click", toggleExceptionListModal);
+        closeButtonthree.addEventListener("click", toggleExceptionListModal);
+        
+        function toggleChartVisualization() {
+            modalfour.classList.toggle("show-modal-four");
+        }
+
+        showfour.addEventListener("click", toggleChartVisualization);
+        closeButtonfour.addEventListener("click", toggleChartVisualization);
+
+        function toggleSideNavBarOverlay() {
+        	modalOverlay.classList.toggle("show-modal-overlay");
+        }
+
+        hamburgermenubtn.addEventListener("click", toggleSideNavBarOverlay);
+        closeButtonSideNav.addEventListener("click", toggleSideNavBarOverlay);
+        
+        /* This method will generate suiteWise result visualization chart data */
+        var suiteWiseChartData = [];
+        var charLabels = ['Class Suites', 'Pass', 'Skip', 'Fail'];
+        suiteWiseChartData.push(charLabels);
+        for(var suiteNames in classSuiteWiseResultJson){
+        	var individualSuiteData = [];
+        	individualSuiteData.push(suiteNames, classSuiteWiseResultJson[suiteNames].passedTestCount,classSuiteWiseResultJson[suiteNames].skippedTestCount,classSuiteWiseResultJson[suiteNames].failedTestCount);
+        	suiteWiseChartData.push(individualSuiteData);
+        }
+        
+        /* This method will generate exception list visualization chart data */
+        var exceptionListChartData = [];
+        var exceptionListChartLables = ['Execution List', 'Number of times thrown'];
+        exceptionListChartData.push(exceptionListChartLables);
+        for(var exceptionTitle in exceptionListJson){
+    		var individualExceptionData = [];
+    		individualExceptionData.push(exceptionTitle.split('.')[exceptionTitle.split('.').length-1],exceptionListJson[exceptionTitle]);
+    		exceptionListChartData.push(individualExceptionData);
+        }
+ 
+        
+		/* Load Execution Status chart */
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(drawChart);
+
+		/* Draw the chart and set the chart values */
+		function drawChart() {
+		  	var data = google.visualization.arrayToDataTable([
+		  	['Execution Result', 'Percentage'],
+		  	['Pass', executionDetailsJson.passedTestCount],
+		  	['Skip', executionDetailsJson.skippedTestCount],
+		  	['Fail', executionDetailsJson.failedTestCount]
+			]);
+
+	  		// Optional; add a title and set the width and height of the chart
+	  		var options = {
+	  				'title':':: Execution Status ::', 
+	  				'width':400, 
+	  				'height':250,
+	  				is3D: true, 
+	  				colors: ['green', '#1e90ff', 'red'], 
+	  				fontSize:12
+	  				};
+
+  			// Display the chart inside the <div> element with id="piechart"
+  			var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+  			chart.draw(data, options);
+		}
+
+		/* Load Suite Wise Result Visualization Chart */
+		google.charts.load('current', {packages: ['corechart', 'bar']});
+		google.charts.setOnLoadCallback(drawStacked);
+
+		function drawStacked() {
+      		var data = google.visualization.arrayToDataTable(suiteWiseChartData);
+
+      		var options = {
+        			title: 'Suite Wise Result Visualization',
+        			chartArea: {width: '50%'},
+        			isStacked: true,
+        			hAxis: {
+          				title: 'Result Count',
+          				minValue: 0,
+        			},
+        			vAxis: {
+          				title: 'Class Suites'
+        			},
+        			colors: ['forestgreen', '#1e90ff', 'indianred'],
+        			fontSize:16
+      				};
+      		var chart = new google.visualization.BarChart(document.getElementById('suiteWiseChartVisualization'));
+      		chart.draw(data, options);
+    	}
+    
+		/* Load Exception List Data Chart */
+    	google.charts.load('current', {'packages':['corechart',  'bar']});
+		google.charts.setOnLoadCallback(drawExceptionChart);
+
+		// Draw the chart and set the chart values
+		function drawExceptionChart() {
+  			var data = google.visualization.arrayToDataTable(exceptionListChartData);
+
+	  		// Optional; add a title and set the width and height of the chart
+	  		var view = new google.visualization.DataView(data);
+	  		view.setColumns([0, 1,
+	                   { calc: "stringify",
+	                     sourceColumn: 1,
+	                     type: "string",
+	                     role: "annotation" }]);
+	
+	  		var options = {
+	    			title: "Number of times exceptions Thrown",
+	    			width: 900,
+	    			height: 400,
+	    			bar: {groupWidth: "65%"},
+	    			legend: { position: "none" },colors:['indianred'],
+	  				};
+	
+	  		var chart = new google.visualization.BarChart(document.getElementById('exceptionListChart'));
+	  		chart.draw(view, options);
+		}
+
+		/* This method will generate ClassSuite-wise result in HTML format */
+		$("#classsuite-wise-result-menu").click(function() {
+			generateClassWiseResultTable(classSuiteWiseResultJson);
+		});
+
+		function generateClassWiseResultTable(resultData) {
+			var classSuiteWiseResultTableElement = document.getElementById('classSuiteWiseResultTable');
+			classSuiteWiseResultTableElement.innerHTML = "";
+			var classSuiteWiseResultTableRow = "";
+			var total = 0;
+			var totalPassCount = 0;
+			var totalSkipCount = 0;
+			var totalFailCount = 0;
+			for(var key in resultData){
+				total = resultData[key].passedTestCount + resultData[key].skippedTestCount + resultData[key].failedTestCount;
+				classSuiteWiseResultTableRow = `<tr>
+					<td class="suitetitle">${key}</td>
+					<td class="pass-count">${resultData[key].passedTestCount}</td>
+					<td class="skip-count">${resultData[key].skippedTestCount}</td>
+					<td class="fail-count">${resultData[key].failedTestCount}</td>
+					<td style="text-align:center;">${total}</td>
+				</tr>`;
+				classSuiteWiseResultTableElement.innerHTML += classSuiteWiseResultTableRow;
+				totalPassCount += resultData[key].passedTestCount;
+				totalSkipCount += resultData[key].skippedTestCount;
+				totalFailCount += resultData[key].failedTestCount;
+		    }
+			classSuiteWiseResultTableElement.innerHTML += `<tr><td style="background:grey;color:white;font-weight:bold;">Total</td>
+				   <td style="text-align:center;font-weight:bold;color:green;">${totalPassCount}</td>
+				   <td style="text-align:center;font-weight:bold;color:blue;">${totalSkipCount}</td>
+				   <td style="text-align:center;font-weight:bold;color:red;">${totalFailCount}</td></tr>`;
+		};
+
+		/* This method will generate Module-wise result in HTML format */
+		$("#module-wise-result-menu").click(function() {
+			generateModuleWiseResultTable(moduleWiseResultJson);
+		});
+		
+		function generateModuleWiseResultTable(resultData) {
+			var moduleWiseResultTableElement = document.getElementById('moduleWiseResultTable');
+			moduleWiseResultTableElement.innerHTML = "";
+			var moduleWiseResultTableRow = "";
+			var total = 0;
+			var totalPassCount = 0;
+			var totalSkipCount = 0;
+			var totalFailCount = 0;
+			for(var key in resultData){
+				total = resultData[key].passedTestCount + resultData[key].skippedTestCount + resultData[key].failedTestCount;
+				moduleWiseResultTableRow = `<tr>
+					<td class="moduleName">${key}</td>
+					<td class="pass-count">${resultData[key].passedTestCount}</td>
+					<td class="skip-count">${resultData[key].skippedTestCount}</td>
+					<td class="fail-count">${resultData[key].failedTestCount}</td>
+					<td style="text-align:center;">${total}</td>
+				</tr>`;
+				moduleWiseResultTableElement.innerHTML += moduleWiseResultTableRow;
+				totalPassCount += resultData[key].passedTestCount;
+				totalSkipCount += resultData[key].skippedTestCount;
+				totalFailCount += resultData[key].failedTestCount;
+		    }
+			moduleWiseResultTableElement.innerHTML += `<tr><td style="background:grey;color:white;font-weight:bold;">Total</td>
+													   <td style="text-align:center;font-weight:bold;color:green;">${totalPassCount}</td>
+													   <td style="text-align:center;font-weight:bold;color:blue;">${totalSkipCount}</td>
+													   <td style="text-align:center;font-weight:bold;color:red;">${totalFailCount}</td></tr>`;
+		};
+		
+		/* This method will generate Exception-Details in HTML format */
+		$("#exception-details-menu").click(function() {
+			generateexceptionListTable(exceptionListJson);
+			//generateExceptionRootCauseTable(exceptionRootCauseJSONData);
+		});
+		
+		function generateexceptionListTable(resultData) {
+			var exceptionListTableElement = document.getElementById('exceptionListTable');
+			exceptionListTableElement.innerHTML = "";
+			var exceptionListTableRow = "";
+			var count = 1;
+			var total = 0;
+				for(var key in resultData){
+				exceptionListTableRow = `<tr>
+					<td style="text-align:center;">${(count++)}</td>
+					<td>${key}</td>
+					<td style="text-align:center;">${resultData[key]}</td>
+				</tr>`;
+				exceptionListTableElement.innerHTML += exceptionListTableRow;
+				total += resultData[key];
+				}
+				exceptionListTableElement.innerHTML += `<tr><td colspan='2' style="background:grey;color:white;font-weight:bold;">Total</td><td style="text-align:center;font-weight:bold;">${total}</td></tr>`;
+		};
+		
+		function generateExceptionRootCauseTable(resultData){
+			var exceptionRootCauseTableElement = document.getElementById("exceptionRootCauseTable");
+			var exceptionRootCauseTableRow = "";
+			var count = 1;
+				for(var key in resultData){
+					exceptionRootCauseTableRow = `<tr>
+					<td>${key}</td>
+					<td>${resultData[key].exceptionName}</td>
+					<td>${resultData[key].exceptionMessage}</td>
+					<td><code>${resultData[key].methodRootCause.toString().replaceAll(',','').replaceAll('\tat','').replace(/^\s+|\s+$/gm,'')}</code></td>
+				</tr>`;
+				exceptionRootCauseTableElement.innerHTML += exceptionRootCauseTableRow;
+				}
+			
+		};
+		
+		/* This method will scroll to Top of the page on clicking Top button */
+		var scrollToTop = document.getElementById("scrollToTopBtn");
+		
+		// When the user scrolls down 70px from the top of the document, show the button
+		window.onscroll = function() {scrollFunction()};
+		
+		function scrollFunction() {
+		  if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
+		    scrollToTop.style.display = "block";
+		  } else {
+		    scrollToTop.style.display = "none";
+		  }
+		}
+		
+		// When the user clicks on the button, scroll to the top of the document
+		function topFunction() {
+		  document.body.scrollTop = 0;
+		  document.documentElement.scrollTop = 0;
+		}
+		
+		/* This method will toggle between HighLevel Stacktrace and Full Stacktrace */
+		function toggleExceptionLevel(exceptionId, exceptionLevel) {
+			if(exceptionLevel == "highLevelStackTrace"){
+				document.getElementById((exceptionLevel + " " + exceptionId)).style.display = "block";
+				document.getElementById(("fullStackTrace " + exceptionId)).style.display = "none";
+				document.getElementById(("tablinks highLevelStackTrace " + exceptionId)).style.background = "#eee";
+				document.getElementById(("tablinks highLevelStackTrace " + exceptionId)).style.color = "black";
+				document.getElementById(("tablinks fullStackTrace " + exceptionId)).style.background = "#555555";
+				document.getElementById(("tablinks fullStackTrace " + exceptionId)).style.color = "white";
+			} 
+			if(exceptionLevel == "fullStackTrace"){
+				document.getElementById((exceptionLevel + " " + exceptionId)).style.display = "block";
+				document.getElementById(("highLevelStackTrace " + exceptionId)).style.display = "none";	
+				document.getElementById(("tablinks fullStackTrace " + exceptionId)).style.background = "#eee";
+				document.getElementById(("tablinks fullStackTrace " + exceptionId)).style.color = "black";
+				document.getElementById(("tablinks highLevelStackTrace " + exceptionId)).style.background = "#555555";
+				document.getElementById(("tablinks highLevelStackTrace " + exceptionId)).style.color = "white";
+			}
+		}
+	</script>
+</body>
+</html>

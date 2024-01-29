@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="fatal" name="RoutingTest">
+<Appenders>
+<Console name="STDOUT" target="SYSTEM_OUT">
+<PatternLayout pattern="%d{dd-MMM-yyyy HH:mm:ss:SSS} %-5p [%c{1}] %m %n"/>
+</Console>
+</Appenders>
+
+<Loggers>
+<Logger name="org.apache.log4j.xml" level="fatal"/>
+<Logger name="org.apache" level="info" />
+<Logger name="org.littleshoot" level="error" />
+<Logger name="net.lightbody" level="error" />
+<Logger name="io.netty" level="info" />
+<Logger name="org.mongodb" level="warn" />
+<Logger name="net.sf.uadetector" level="error" />
+<Logger name="com.gargoylesoftware.htmlunit" level="info"/>
+<!-- Add your logback loggers here -->
+
+<Root level="debug">
+<AppenderRef ref="STDOUT"/>
+</Root>
+</Loggers>
+</Configuration>

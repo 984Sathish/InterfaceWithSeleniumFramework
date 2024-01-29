@@ -1,0 +1,57 @@
+<style type="text/css">
+    table {margin-bottom:15px; margin-left:10px; border-collapse:separate;empty-cells:show; border: 2px solid #000000;border-spacing: 1px;}
+    body>table:nth-of-type(1) {width: 30%}
+    body>table:nth-of-type(2) {width: 75%}
+    th {border:1px solid #000000; padding:.75em .5em;  box-shadow: inset 0 1px 0 #999;} 
+    td {border:1px solid #000000; padding:.35em .5em; }
+    th {border-bottom: 1px solid; border-top: 1px solid; border-color: #474646; border-bottom-color: #474646; box-shadow: inset 0 1px 0 #999; }
+    tbody {border-bottom: 1px solid; border-top: 1px solid;}
+    body {font-family: Verdana, Geneva, sans-serif; font-size: 80%; font-weight: 500;  }
+    .num {text-align:right}
+    tr[class^='passed'] td a {color: #009400}
+    tr[class^='skipped'] td a {color: #0080FF}
+    tr[class^='failed'] td a, .attn {color: #F00000}
+    tr[class^='retired'] td a {color: #F00000}    
+  
+    th {background-color: #BBBBBB; color: black; }  
+    div[class*='test-event'] {display:none;}
+    table[class='result'] {font-family: monospace; font-size: 100%;}
+    .stacktrace {white-space: pre-wrap;}   
+    .collapsible {
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+}
+
+.active, .collapsible:hover {
+    background-color: #555;
+}
+
+.content {
+    padding: 0 10px;
+    display: none;
+    overflow: hidden;
+    background-color: #f1f1f1;
+}
+
+#button {
+  background-color: #C0C0C0;
+  border: none;
+  color: black;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 10px;
+  font-weight: bold;
+  margin: 4px 2px;
+  cursor: pointer;
+}     
+   
+</style>

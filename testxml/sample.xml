@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="PC_InlandMarineSuite" preserve-order="true" verbose="5" parallel="methods" thread-count="1">  <!-- parallel="methods" thread-count="1" -->
+	<parameter name="deviceHost" value="localhost" />
+	<parameter name="devicePort" value="4444" />
+	<parameter name="browserName" value="chrome" />
+	<parameter name="reportPortal" value="Yes" />
+		<parameter name="hRMWebSite" 
+		value="https://opensource-demo.orangehrmlive.com/" />
+	<listeners>
+		<listener class-name="com.OrangeHRM.utils.EmailReport" />
+		<!-- <listener class-name="com.OrangeHRM.utils.LiveReportListener"/>
+		<listener class-name="com.OrangeHRM.utils.RetryListener" /> 
+		<listener class-name="com.epam.reportportal.testng.ReportPortalTestNGListener"/>-->
+	</listeners>
+	<test verbose="2" name="Report"><!-- Total Count = 15 -->
+			<classes>
+			<class name="com.OrangeHRM.testscripts.EmployeeInterTestSuite"/>
+			<class name="com.OrangeHRM.testscripts.AdminInterTestSuite"/>
+			<class name="com.OrangeHRM.testscripts.ClaimInterTestSuite"/>
+			<class name="com.OrangeHRM.testscripts.LeaveInterTestSuite"/>
+			<class name="com.OrangeHRM.testscripts.RecruitmentInterTestSuite"/>
+			<class name="com.OrangeHRM.testscripts.TimeSheetInterTestSuite"/>
+		</classes>
+	</test>
+</suite>

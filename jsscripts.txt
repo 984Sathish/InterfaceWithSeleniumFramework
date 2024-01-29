@@ -1,0 +1,321 @@
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        $(document).ready(function(){
+        
+        //To getting the pass, fail and skip count from suite summary table
+        var passcount=parseInt($("table[id='suitesummary']").find("tr:nth-last-of-type(1) .num:nth-child(2)").text().trim().replace(",",""));
+        var skipcount=parseInt($("table[id='suitesummary']").find("tr:nth-last-of-type(1) .num:nth-child(3)").text().trim().replace(",",""));
+        var failcount=parseInt($("table[id='suitesummary']").find("tr:nth-last-of-type(1) .num:nth-child(5)").text().trim().replace(",",""));
+        
+        var data = google.visualization.arrayToDataTable([
+          ['Status', 'Count'],
+          ['Pass', passcount],
+          ['Fail', failcount],
+          ['Skip', skipcount]
+        ]);
+
+        var options = {
+          title: 'Test Result Status',
+          width: 400,
+          height: 300,        
+          colors: ['green', 'red', 'dodgerblue'],
+          fontSize: 14,
+          fontName: 'Verdana',               
+          backgroundColor: { fill:'transparent' },
+          chartArea: {'width': '75%', 'height': '75%'}    
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        //To draw the pie chart with data and options
+        chart.draw(data, options);
+        });
+      }
+    </script>
+
+<script type="text/javascript">
+
+    function hideTestDetails() {
+    
+         $("tr[class^='skip'] a:not(:visible),tr[class^='pass'] a:not(:visible),tr[class^='failed'] a:not(:visible)").each(function() {
+                $($(this).get(0).getAttribute("href")).hide();
+                $($(this).get(0).getAttribute("href")).next().hide();
+                $($(this).get(0).getAttribute("href")).next().next().hide();
+             });
+             
+    }
+    
+    function showTestDetails() {
+    
+         $("tr[class^='skip'] a:visible,tr[class^='pass'] a:visible,tr[class^='failed'] a:visible").each(function() {
+                    $($(this).get(0).getAttribute("href")).show();
+                    $($(this).get(0).getAttribute("href")).next().show();
+                    $($(this).get(0).getAttribute("href")).next().next().show();
+             });
+    }
+    $(document).ready(function(){
+    
+        //Change Titles for Suite & Summary Table headers
+        $("table[id='suitesummary']").find("th").eq(5).text("Total Duration");
+     //  $("table[id='suitesummary']").find("tr th:nth-last-of-type(2):eq(0)").text("Time (MS)");
+        $("table[id='summary']").find("thead th").eq(0).text("Test Suites");
+        $("table[id='summary']").find("thead th").eq(1).text("Test Cases");
+        $("table[id='summary']").find("thead th").eq(3).text("Time");
+        
+     //   $("table[id='suitesummary']").find("tr td:nth-last-of-type(5),th:nth-last-of-type(5)").hide();
+       $("table[id='suitesummary']").find("tr td:nth-last-of-type(1),th:nth-last-of-type(1)").hide();
+        $("table[id='suitesummary']").find("tr td:nth-last-of-type(1),th:nth-last-of-type(1):eq(0)").hide();
+       $("table[id='suitesummary']").find("tr td:nth-last-of-type(2),th:nth-last-of-type(2):eq(0)").hide();
+    
+        $("<th>Pass/Fail</th>").insertBefore($("table[id='summary']").find("th:nth-last-of-type(2)"))
+        $("table[id='summary']").find("tr[class^='pass'] td:nth-last-of-type(2)").each(function() {
+        
+        var bsLink=$("table[id='summary']").find("tr[class^='pass'] td:nth-of-type(2) a").attr("href");
+        
+       	 if (($(this).get(0).getAttribute("rowSpan") != null) && ($("h3"+bsLink+" + table tr:nth-child(2) a").attr("href")!=undefined))
+                $("<td valign=center align=center bgcolor=#009400 rowSpan=" + $(this).get(0).getAttribute("rowSpan") + "><a href='"+ $("h3"+bsLink+" + table tr:nth-child(2) a").attr("href") + "' target='_blank'><font color='white'><u>Pass</u></font></a></td>").insertBefore($(this));
+            else
+                $("<td valign=center align=center bgcolor=#009400><font color='white'>Pass</font></td>").insertBefore($(this));
+        });
+        
+        $("table[id='summary']").find("tr[class^='fail'] td:nth-last-of-type(2)").each(function() {
+        
+        var bsLink=$("table[id='summary']").find("tr[class^='fail'] td:nth-of-type(2) a").attr("href");
+        
+            if (($(this).get(0).getAttribute("rowSpan") != null) && ($("h3"+bsLink+" + table tr:nth-child(2) a").attr("href")!=undefined))
+                $("<td valign=center align=center bgcolor=#F00000 rowSpan=" + $(this).get(0).getAttribute("rowSpan") + "><a href='"+ $("h3"+bsLink+" + table tr:nth-child(2) a").attr("href") + "' target='_blank'><font color='white'><u>Fail</u></font></a></td>").insertBefore($(this));
+            else
+                $("<td valign=center align=center bgcolor=#F00000><font color='white'>Fail</font></td>").insertBefore($(this));
+        });
+
+        $("table[id='summary']").find("tr[class^='skip'] td:nth-last-of-type(2)").each(function() {
+        
+            if ($(this).get(0).getAttribute("rowSpan") != null)
+                $("<td valign=center align=center bgcolor=#0080FF rowSpan=" + $(this).get(0).getAttribute("rowSpan") + "><font color='white'>Skip</font></td>").insertBefore($(this))
+            else
+                $("<td valign=center align=center bgcolor=#0080FF><font color='white'>Skip</font></td>").insertBefore($(this));
+        });
+        
+        $("table[id='summary']").find("tr[class^='retried'] td:nth-last-of-type(2)").each(function() {
+         var bsLink=$("table[id='summary']").find("tr[class^='retried'] td:nth-of-type(2) a").attr("href");
+            if ($(this).get(0).getAttribute("rowSpan") != null)
+                $("<td valign=center align=center bgcolor=#F00000 rowSpan=" + $(this).get(0).getAttribute("rowSpan") + "><font color='white'>Retried</font></td>").insertBefore($(this))
+            else
+                $("<td valign=center align=center bgcolor=#F00000><font color='white'>Retried</font></td>").insertBefore($(this));
+        });
+                
+
+        $('a').css('textDecoration','none') //hide hyperlinks underline
+        $("body>table:nth-of-type(2) th[colspan]").hide() //Hide site table row headers pass, fail , skip
+    
+        //Test Start
+        $($("table[id='summary']").find("tr[class]")).find("td:last").prev().each(function() {
+           var time = new Date($(this).text()/1);
+           time = (time.getHours()<10?"0"+time.getHours():time.getHours()) + ":" + (time.getMinutes()<10?"0"+time.getMinutes():time.getMinutes()) + ":" + (time.getSeconds()<10?"0"+time.getSeconds():time.getSeconds());
+            $(this).text(time);
+         });
+
+        
+        //Test Run Duration
+        $("table[id='summary']").find("tr[class]").each(function() {
+            if ($(this).find("td").length >=3) {
+                var milliseconds = $(this).find("td:last").text()/1;
+                var seconds = Math.round(milliseconds/1000)%60;
+                var minutes = Math.floor(milliseconds/(1000*60))%60;
+                var hours = Math.floor(milliseconds/(1000*60*60));
+                var time = (hours<10 ? "0"+hours : hours) + ":" + (minutes<10 ? "0"+minutes : minutes) + ":" + (seconds<10 ? "0"+seconds : seconds) ;
+                $($(this).find("td:last").get(0)).text(time);
+            }
+        });
+    
+        //Test Suite Run Duration - Top Table
+        $($("table[id='suitesummary']").find("tr")).find("td:nth-of-type(6)").each(function() {
+            var milliseconds = $(this).text().replace(/,/g, "")/1;
+            var seconds = Math.round(milliseconds/1000)%60;
+            var minutes = Math.floor(milliseconds/(1000*60))%60;
+            var hours = Math.floor(milliseconds/(1000*60*60));
+            var time = (hours<10 ? "0"+hours : hours) + ":" + (minutes<10 ? "0"+minutes : minutes) + ":" + (seconds<10 ? "0"+seconds : seconds) ;
+            $(this).text(time);
+        });
+        
+        //Test Suite Total Duration
+        var milliseconds = $("table[id='suitesummary']").get(0).getAttribute("duration")/1;
+        var seconds = Math.round(milliseconds/1000)%60;
+        var minutes = Math.floor(milliseconds/(1000*60))%60;
+        var hours = Math.floor(milliseconds/(1000*60*60));
+        var time = (hours<10 ? "0"+hours : hours) + ":" + (minutes<10 ? "0"+minutes : minutes) + ":" + (seconds<10 ? "0"+seconds : seconds) ;
+        $("table[id='suitesummary']").find("th:last").prev().text(time);
+    
+        var header = "<hr size=3 noshade><h2 align=center>" + $("table:eq(0) tr:nth-of-type(2) th:first").text() + "</h2><hr size=3 noshade><br>"
+        $(header).insertBefore($("table").get(0));
+        $("<h3>Result Summary:</h3>").insertBefore($("table").get(0)); 
+        $("table[id='suitesummary']").find("tr:first").before('<tr><th colspan=6>Suite Summary</th></tr>');      
+        $("table[id='summary']").find("tr:first").before('<tr><th colspan=5>Test Case Summary</th></tr>');          
+        $("<div id='chart_div' style='float: right;margin-right: 120px;margin-bottom: 10px;'></div>").insertBefore($("h3").get(0));      });
+        
+    /*
+     * Displays only the test case summary of clicked suite
+     */
+    $(document).ready(function(){
+          
+        $("a[href^='#t']").parent().click(function(){
+            
+            $("tbody[id^='t']").hide();
+            var tgtTable = $($($(this).get(0)).children("a").get(0).getAttribute("href"));
+            $(tgtTable).show();
+            $(tgtTable).find("tr").each(function() {
+                $(this).show();
+            });
+            hideTestDetails();
+            showTestDetails();
+             
+        });
+    
+        //Preventing click of suite hyper link so function to hide other suite summary is not called
+        $("a[href^='#t']").click(function(e){
+              e.stopPropagation();
+         });
+    
+    });
+    
+    /*
+     * Double click shows all test cases summary
+     */
+     
+     $(document).ready(function(){
+         
+         $("table[id='suitesummary']").dblclick(function(){
+            
+            $("tbody[id^='t']").show();
+            $("tr[class^='failed']").show();
+            $("tr[class^='skip']").show();
+            $("tr[class^='pass']").show(); 
+            $("tr[class^='retried']").show();
+         
+            hideTestDetails();
+            showTestDetails();
+
+        });
+        
+    });
+        
+     $(document).ready(function(){
+         
+         $("table:eq(0) tr:last th:first").click(function(){
+             $("table[id='suitesummary']").trigger("dblclick");
+
+        });
+        
+    });
+
+     /*
+     * Display only pass/skip/fail cases
+     */
+    $(document).ready(function(){
+        
+        $("td[class^='num'],th[class^='num']").click(function(){
+            
+            var col = $(this).index();
+            var row = $(this).closest("tr");
+            $($(row).find("td,th").get(0)).trigger("click");
+            
+            if (col == 1) {
+                $("tr[class^='failed']").hide();
+                $("tr[class^='skip']").hide();
+                 $("tr[class^='retried']").hide();
+                $("tr[class^='pass']").show();
+             
+            }
+        
+            if (col == 2) {
+                $("tr[class^='failed']").hide();
+                $("tr[class^='pass']").hide();
+                  $("tr[class^='retried']").hide();
+                $("tr[class^='skip']").show();
+            }
+            if (col == 3) {
+                $("tr[class^='skip']").hide();
+                $("tr[class^='pass']").hide();
+                $("tr[class^='failed']").hide();
+                $("tr[class^='retried']").show();
+            }
+        
+            if (col == 4) {
+                $("tr[class^='skip']").hide();
+                $("tr[class^='pass']").hide();
+                $("tr[class^='retried']").hide();
+                $("tr[class^='failed']").show();
+            }
+        
+            hideTestDetails();
+            showTestDetails();
+        });
+    });
+        
+    /*
+     * Shows test events on key press of ctrl+alt+e
+     */
+    var flag = true;
+    window.addEventListener("keyup", checkKeyUp, true);
+    window.addEventListener("keydown", checkKeyDown, true);
+    var keys = [];
+    function checkKeyDown(e) {
+        keys[e.keyCode] = true;
+        if(keys[17] && keys[18] && keys[69]) {
+			if(flag){
+				$("div[class*='test-event']").fadeIn("fast");
+				flag = false;
+			}
+			else{
+				$("div[class*='test-event']").fadeOut("fast");
+				flag = true;
+			}
+		}
+	}
+    function checkKeyUp(e) {
+         keys[e.keyCode] = false;
+    }
+    
+    /*
+     * Collapse
+     */
+    $(document).ready(function(){
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
+    }
+    });
+    
+    /*
+     * To change the display property based on the classname
+     */
+    function eventFunction(eventElement) {
+		$("."+eventElement).fadeToggle("fast");
+		//$("div[class='"+eventElement+"']").fadeToggle("fast");
+		/*	
+		var x = document.getElementsByClassName(eventElement);
+		var i;
+		for (i = 0; i < x.length; i++) {
+			if (x[i].style.display === "block") {
+				x[i].style.display = "none";
+			} else {
+				x[i].style.display = "block";
+			}
+		}
+		*/
+	}
+
+</script>
